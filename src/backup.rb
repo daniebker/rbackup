@@ -20,7 +20,7 @@ directoryToZip = Pathname.new(source)
 if target.to_s == ''
     outputDir = Pathname.new(directoryToZip.to_s())
 else     
-    outputDir = Pathname.new(target + Socket.gethostname + "/" + directoryToZip.to_s().tr(':', ''))
+    outputDir =  Pathname.new(File.join(target, Socket.gethostname, directoryToZip.to_s().tr(':', '')))
 end
 
 if(!directory_exists?(outputDir.parent.to_s))
