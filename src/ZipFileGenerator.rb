@@ -1,5 +1,5 @@
 require 'zip'
-
+require 'parallel'
 # This is a simple example which uses rubyzip to
 # recursively generate a zip file from the contents of
 # a specified directory. The directory itself is not
@@ -31,7 +31,7 @@ class ZipFileGenerator
   private
   def writeEntries(entries, path, io)
 
-    entries.each { |e|
+    Parallel.map(entries, in_threads: 5) do |e|    
       zipFilePath = path == "" ? e : File.join(path, e)
       diskFilePath = File.join(@inputDir, zipFilePath)
       puts "Deflating " + diskFilePath
@@ -42,7 +42,7 @@ class ZipFileGenerator
       else
         io.get_output_stream(zipFilePath) { |f| f.puts(File.open(diskFilePath, "rb").read())}
       end
-    }
+    end
   end
 
 end
